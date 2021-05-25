@@ -1737,16 +1737,19 @@ impl<T: EventListener> Handler for Term<T> {
         //
         //   Pi = 1  -> item is number of color registers.
         //   Pi = 2  -> item is Sixel graphics geometry (in pixels).
+        //   Pi = 3  -> item is character cell geometry (in pixels, width×height).
         //
         //   Pa = 1  -> read attribute.
         //   Pa = 4  -> read the maximum allowed value.
         //
         // Any other request reports an error.
 
+        let cell_dims = [self.cell_width, self.cell_height];
         let (ps, pv) = if pa == 1 || pa == 4 {
             match pi {
                 1 => (0, &[sixel::MAX_COLOR_REGISTERS][..]),
                 2 => (0, &[MAX_GRAPHIC_DIMENSIONS.0, MAX_GRAPHIC_DIMENSIONS.1][..]),
+                3 => (0, &cell_dims[..]),
                 _ => (1, &[][..]), // Report error in Pi
             }
         } else {

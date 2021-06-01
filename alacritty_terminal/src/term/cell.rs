@@ -111,6 +111,13 @@ impl Cell {
         self.extra.as_deref().and_then(|extra| extra.graphic.as_deref())
     }
 
+    /// Remove graphic data from the cell.
+    #[inline]
+    pub fn remove_graphics(&mut self) {
+        self.extra.as_mut().and_then(|extra: &mut Box<CellExtra>| extra.graphic.as_mut().and_then(|graphic: &mut Vec<GraphicCell>| { graphic.clear(); Some(graphic) }));
+        self.flags_mut().remove(Flags::GRAPHICS);
+    }
+
     /// Write the graphic data in the cell.
     #[inline]
     pub fn set_graphic(&mut self, graphic_cell: GraphicCell) {
